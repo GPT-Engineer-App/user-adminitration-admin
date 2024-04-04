@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Select, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Select, Table, Tbody, Td, Text, Th, Thead, Tr, VStack, Image } from "@chakra-ui/react";
 import { FaPlus, FaTrash, FaEdit, FaChartBar } from "react-icons/fa";
 
 const Index = () => {
@@ -8,6 +8,7 @@ const Index = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [service, setService] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
 
   const handleInviteUser = () => {
@@ -17,6 +18,7 @@ const Index = () => {
         email,
         name,
         roles: [{ role, service }],
+        profilePicture,
       };
       setUsers([...users, newUser]);
       setEmail("");
@@ -41,6 +43,7 @@ const Index = () => {
     setName(user.name);
     setRole(user.roles[0].role);
     setService(user.roles[0].service);
+    setProfilePicture(user.profilePicture);
   };
 
   const handleUpdateUser = () => {
@@ -52,6 +55,7 @@ const Index = () => {
             email,
             name,
             roles: [{ role, service }],
+            profilePicture,
           };
         }
         return user;
@@ -97,6 +101,10 @@ const Index = () => {
               <option value="service2">Service 2</option>
             </Select>
           </FormControl>
+          <FormControl>
+            <FormLabel>Profile Picture</FormLabel>
+            <Input type="file" accept="image/*" onChange={(e) => setProfilePicture(e.target.files[0])} />
+          </FormControl>
           {editingUser ? (
             <Button leftIcon={<FaEdit />} onClick={handleUpdateUser}>
               Update User
@@ -112,6 +120,7 @@ const Index = () => {
           <Table>
             <Thead>
               <Tr>
+                <Th>Profile Picture</Th>
                 <Th>Email</Th>
                 <Th>Name</Th>
                 <Th>Roles</Th>
@@ -121,6 +130,11 @@ const Index = () => {
             <Tbody>
               {users.map((user) => (
                 <Tr key={user.id}>
+                  <Td>
+                    {user.profilePicture && (
+                      <Image src={URL.createObjectURL(user.profilePicture)} alt="Profile Picture" boxSize="50px" objectFit="cover" borderRadius="full" />
+                    )}
+                  </Td>
                   <Td>{user.email}</Td>
                   <Td>{user.name}</Td>
                   <Td>
